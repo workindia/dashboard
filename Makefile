@@ -280,6 +280,9 @@ docker-push-head: docker-build-head
 clone-repo:
   git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
 
+build-go: clone-repo
+    cd repo && go build -o app
+
 build-docker: clone-repo
   docker build -t kubernetes-dashboard-v2.7.0-cronfix repo
 
