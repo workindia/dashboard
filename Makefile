@@ -286,7 +286,7 @@ build-go: clone-repo
 build-docker: clone-repo
   docker build -t kubernetes-dashboard-v2.7.0-cronfix repo
 
-push-ecr: build-docker
+push-ecr: build-go
 	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
 	docker tag kubernetes-dashboard-v2.7.0-cronfix:latest $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
 	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
