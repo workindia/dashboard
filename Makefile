@@ -37,7 +37,6 @@ HEAD_IMAGE = kubernetesdashboarddev/dashboard
 HEAD_VERSION = latest
 HEAD_IMAGE_NAMES += $(foreach arch, $(ARCHITECTURES), $(HEAD_IMAGE)-$(arch):$(HEAD_VERSION))
 ARCHITECTURES = amd64 arm64 arm ppc64le s390x
-ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 .PHONY: ensure-version
