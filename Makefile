@@ -278,7 +278,7 @@ docker-push-head: docker-build-head
 
 .PHONY: build-and-push
 build-and-push:
-	docker build --build-arg GITHUB_TOKEN=$(ARG) -t kubernetes-dashboard-v2.7.0-cronfix
+	docker build --build-arg GITHUB_TOKEN=$(ARG) -t kubernetes-dashboard-v2.7.0-cronfix .
 	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
 	docker tag kubernetes-dashboard-v2.7.0-cronfix:latest $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
 	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
