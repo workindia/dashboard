@@ -278,8 +278,6 @@ docker-push-head: docker-build-head
 
 .PHONY: build-and-push
 build-and-push:
-  git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ temp-repo
-  cd temp-repo && docker build -t $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME) -f - .
-  aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
-  docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME)
-  rm -rf temp-repo
+  git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
+  docker build -t kubernetes-dashboard-v2.7.0-cronfix --build-arg GITHUB_TOKEN=$(ARG) https://github.com/workindia/dashboard/tree/v2.7.0-cronfix
+  docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
