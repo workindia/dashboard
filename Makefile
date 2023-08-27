@@ -280,3 +280,5 @@ docker-push-head: docker-build-head
 build-and-push:
   git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
   docker build -t kubernetes-dashboard-v2.7.0-cronfix --build-arg GITHUB_TOKEN=$(ARG) https://github.com/workindia/dashboard/tree/v2.7.0-cronfix
+  docker tag kubernetes-dashboard-v2.7.0-cronfix:latest $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
+  docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
