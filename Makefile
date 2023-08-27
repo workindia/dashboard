@@ -281,7 +281,7 @@ clone-repo:
   git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
 
 build-go: clone-repo
-    cd repo && go build -o app
+  cd repo && go build -o app
 
 build-docker: build-go
   docker build -t kubernetes-dashboard-v2.7.0-cronfix repo
