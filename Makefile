@@ -275,3 +275,20 @@ docker-build-head: build-cross
 docker-push-head: docker-build-head
 	docker manifest create --amend $(HEAD_IMAGE):$(HEAD_VERSION) $(HEAD_IMAGE_NAMES)
 	docker manifest push $(HEAD_IMAGE):$(HEAD_VERSION) ; \
+
+.PHONY: build-and-push
+clone-repo:
+  git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
+
+build-go: clone-repo
+  cd repo && go build -o app
+
+build-docker: build-go
+  docker build -t kubernetes-dashboard-v2.7.0-cronfix repo
+
+push-ecr: build-docker
+	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+	docker tag kubernetes-dashboard-v2.7.0-cronfix:latest $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
+	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
+
+build-push-ecr: push-ecr
