@@ -1,20 +1,16 @@
 # Use an official Go image as the base image
-FROM golang:1.17
+FROM node:14
 
 # Set the working directory inside the container
 WORKDIR /app
 
 RUN git clone https://github.com/workindia/dashboard.git --branch v2.7.0-cronfix .
 
-RUN pwd
+# Install Node.js dependencies
+RUN npm install
 
-RUN cd dashboard
+# Build the application
+RUN npm run build
 
-# Copy the entire repository into the container
-COPY . .
-
-# Build the Go application
-RUN go build -o app
-
-# Specify the command to run the application
-CMD ["./app"]
+# Specify the command to run the application (you might need to adjust this)
+CMD ["npm", "start"]
