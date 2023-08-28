@@ -29,14 +29,14 @@ SYSTEM_BANNER_SEVERITY ?= INFO
 PROD_BINARY = dist/amd64/dashboard
 SERVE_DIRECTORY = .tmp/serve
 SERVE_BINARY = .tmp/serve/dashboard
-RELEASE_IMAGE = kubernetesui-wi/dashboard
+RELEASE_IMAGE = kubernetesui/dashboard
 RELEASE_VERSION = v2.7.0
 RELEASE_IMAGE_NAMES += $(foreach arch, $(ARCHITECTURES), $(RELEASE_IMAGE)-$(arch):$(RELEASE_VERSION))
 RELEASE_IMAGE_NAMES_LATEST += $(foreach arch, $(ARCHITECTURES), $(RELEASE_IMAGE)-$(arch):latest)
 HEAD_IMAGE = kubernetesdashboarddev/dashboard
 HEAD_VERSION = latest
 HEAD_IMAGE_NAMES += $(foreach arch, $(ARCHITECTURES), $(HEAD_IMAGE)-$(arch):$(HEAD_VERSION))
-ARCHITECTURES = arm64
+ARCHITECTURES = amd64 arm64 arm ppc64le s390x
 
 .PHONY: ensure-version
 ensure-version:
@@ -278,6 +278,7 @@ docker-push-head: docker-build-head
 
 .PHONY: build-and-push
 build-and-push:
-  git clone -b v2.7.0-cronfix --single-branch https://github.com/workindia/dashboard/ repo
-  docker build -t kubernetes-dashboard-v2.7.0-cronfix --build-arg GITHUB_TOKEN=$(ARG) https://github.com/workindia/dashboard/tree/v2.7.0-cronfix
-  docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
+	docker build --build-arg GITHUB_TOKEN=$(ARG) -t kubernetes-dashboard-v2.7.0-cronfix github.com/workindia/dashboard/tree/v2.7.0-cronfix
+	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+	docker tag kubernetes-dashboard-v2.7.0-cronfix:latest $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
+	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(ECR_REPO_NAME):latest
