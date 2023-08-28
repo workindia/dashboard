@@ -19,8 +19,6 @@ FROM ubuntu:20.04 as builder
 
 # Create a nonroot user for final image
 RUN useradd -u 10001 nonroot
-
-COPY ./src/app/backend/dashboard /dashboard
 # Scratch can be used as the base image because the backend is compiled to include all
 # its dependencies.
 FROM scratch as final
@@ -28,7 +26,6 @@ FROM scratch as final
 # Add all files from current working directory to the root of the image, i.e., copy dist directory
 # layout to the root directory.
 ADD . /
-COPY --from=builder /dashboard /dashboard
 # Copy nonroot user
 COPY --from=builder /etc/passwd /etc/passwd
 USER nonroot
