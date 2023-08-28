@@ -15,9 +15,7 @@
 # Main Dockerfile of the project. It creates an image that serves the application. This image should
 # be built from the dist directory.
 
-ARG BUILDPLATFORM
-
-FROM --platform=$BUILDPLATFORM ubuntu:20.04 as builder
+FROM --platform=amd64 ubuntu:20.04 as builder
 
 # Create a nonroot user for final image
 RUN useradd -u 10001 nonroot
