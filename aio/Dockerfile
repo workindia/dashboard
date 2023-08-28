@@ -15,19 +15,27 @@
 # Main Dockerfile of the project. It creates an image that serves the application. This image should
 # be built from the dist directory.
 
-FROM ubuntu:20.04 as builder
+# Build stage
+FROM golang:1.17 as builder
 
-# Create a nonroot user for final image
+WORKDIR /src/app/backend
+
+# Copy the source code
+COPY src/app/backend/ .
+
+# Build the dashboard binary
+RUN go build -o dashboard dashboard.go
+
+# Final image stage
+FROM ubuntu:20.04 as final
+
+# Create a nonroot user for the final image
 RUN useradd -u 10001 nonroot
-# Scratch can be used as the base image because the backend is compiled to include all
-# its dependencies.
-FROM scratch as final
 
-# Add all files from current working directory to the root of the image, i.e., copy dist directory
-# layout to the root directory.
-ADD . /
+# Copy the dashboard binary from the build stage
+COPY --from=builder /src/app/backend/dashboard /dashboard
+
 # Copy nonroot user
-RUN go build -o dashboard
 COPY --from=builder /etc/passwd /etc/passwd
 USER nonroot
 
