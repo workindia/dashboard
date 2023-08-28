@@ -5,7 +5,7 @@ FROM golang:1.17
 WORKDIR /app
 
 # Copy the entire repository into the container
-COPY . .
+COPY src/ .
 
 # Build the Go application
 RUN go build -o app
