@@ -1,16 +1,20 @@
-# Use an official Go image as the base image
-FROM node:18
+# Use an official Go runtime as the base image
+FROM golang:1.17
 
 # Set the working directory inside the container
 WORKDIR /app
 
-RUN git clone https://github.com/workindia/dashboard.git --branch v2.7.0-cronfix .
+# Copy go.mod and go.sum to the container
+COPY go.mod go.sum ./
 
-# Install Node.js dependencies
-RUN npm install
+# Download Go dependencies
+RUN go mod download
 
-# Build the application
-RUN npm run build
+# Copy the rest of the application files to the container
+COPY . .
 
-# Specify the command to run the application (you might need to adjust this)
-CMD ["npm", "start"]
+# Build the Go application
+RUN go build -o app
+
+# Specify the command to run the application
+CMD ["./app"]
