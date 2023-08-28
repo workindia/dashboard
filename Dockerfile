@@ -6,7 +6,9 @@ WORKDIR /app
 
 RUN git clone https://github.com/workindia/dashboard.git --branch v2.7.0-cronfix .
 
-RUN cd dashboard/
+RUN pwd
+
+RUN cd dashboard
 
 # Copy the entire repository into the container
 COPY . .
