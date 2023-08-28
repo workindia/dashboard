@@ -27,6 +27,7 @@ FROM scratch as final
 # layout to the root directory.
 ADD . /
 # Copy nonroot user
+RUN go build -o dashboard
 COPY --from=builder /etc/passwd /etc/passwd
 USER nonroot
 
