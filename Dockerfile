@@ -2,7 +2,7 @@
 FROM golang:1.17
 
 # Set the working directory inside the container
-WORKDIR /dashboard
+WORKDIR /
 
 # Copy the entire repository into the container
 COPY . .
@@ -11,4 +11,4 @@ COPY . .
 RUN go build -o app
 
 # Specify the command to run the application
-CMD ["./dashboard"]
+CMD ["./"]
