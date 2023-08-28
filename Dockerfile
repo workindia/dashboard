@@ -34,4 +34,4 @@ USER nonroot
 
 # The port that the application listens on.
 EXPOSE 9090 8443
-ENTRYPOINT ["/dashboard", "--insecure-bind-address=0.0.0.0", "--bind-address=0.0.0.0"]
+ENTRYPOINT ["/dashboard/src/app/backend/dashboard", "--insecure-bind-address=0.0.0.0", "--bind-address=0.0.0.0"]
